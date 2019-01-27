@@ -24,7 +24,6 @@ class App extends Component {
 
   add = e => {
     const newObj = {
-      id: uuid(),
       title: e,
       completed: false
     };
@@ -60,13 +59,20 @@ class App extends Component {
   };
 
   removeItem = id => {
-    let newRemove = this.state.companies.filter(e => {
-      return e.id !== id;
-    });
-
-    this.setState({
-      companies: newRemove
-    });
+    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" }
+    })
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          companies: [
+            ...this.state.companies.filter(e => {
+              return e.id !== id;
+            })
+          ]
+        });
+      });
   };
 
   render() {
