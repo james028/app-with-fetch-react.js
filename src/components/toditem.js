@@ -3,14 +3,15 @@ import "../styles.css";
 
 class TodoItem extends Component {
   render() {
+    const { completed } = this.props.comp;
     return (
-      <div style={styles}>
-        <div className={`${this.props.comp.completed ? "line" : " "}`}>
+      <div className={`main-back ${completed ? "back" : " "}`}>
+        <div className={`${completed ? "line" : " "}`}>
           <input
             type="checkbox"
             onChange={() => this.props.toggleLine(this.props.comp.id)}
           />
-          {this.props.comp.name}{" "}
+          {this.props.comp.title}{" "}
         </div>
         <button
           style={btn}
@@ -30,15 +31,6 @@ const btn = {
   width: "30px",
   cursor: "pointer",
   backgroundColor: "#e44"
-};
-
-const styles = {
-  display: "flex",
-  justifyContent: "space-between",
-  backgroundColor: "#eee",
-  fontSize: "24px",
-  marginBottom: "10px",
-  padding: "10px"
 };
 
 export default TodoItem;

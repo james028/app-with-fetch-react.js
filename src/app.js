@@ -1,28 +1,49 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Todo from "./components/todo";
 import Header from "./layout/header";
 import Form from "./components/submit";
+import About from "./layout/about";
 import uuid from "uuid";
 
 class App extends Component {
   state = {
-    companies: [
-      { id: 1, name: "Company One", category: "Finance", completed: false },
-      { id: 2, name: "Company Two", category: "Retail", completed: false },
-      { id: 3, name: "Company Three", category: "Auto", completed: false }
-    ]
+    companies: []
   };
+
+  componentDidMount() {
+    fetch("https://jsonplaceholder.typicode.com/todos?_limit=5")
+      .then(res => res.json())
+      .then(data =>
+        this.setState({
+          companies: data
+        })
+      )
+      .catch(err => console.log(err));
+  }
 
   add = e => {
     const newObj = {
       id: uuid(),
-      name: e,
+      title: e,
       completed: false
     };
 
-    this.setState({
-      companies: [...this.state.companies, newObj]
-    });
+    fetch("https://jsonplaceholder.typicode.com/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newObj)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.setState({
+          companies: [...this.state.companies, data]
+        });
+        console.log(this.state.companies);
+      });
   };
 
   toggleLine = id => {
@@ -51,15 +72,30 @@ class App extends Component {
   render() {
     return (
       <div>
-        <div className="content">
-          <Header />
-          <Form add={this.add} />
-          <Todo
-            companies={this.state.companies}
-            toggleLine={this.toggleLine}
-            removeItem={this.removeItem}
-          />
-        </div>
+        <Router>
+          <div className="content">
+            <Header />
+            <Form add={this.add} />
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <>
+                  {this.state.companies.length < 1 ? (
+                    <h1>Nie ma żadnych zadań</h1>
+                  ) : (
+                    <Todo
+                      companies={this.state.companies}
+                      toggleLine={this.toggleLine}
+                      removeItem={this.removeItem}
+                    />
+                  )}
+                </>
+              )}
+            />
+            <Route path="/about" component={About} />
+          </div>
+        </Router>
       </div>
     );
   }
