@@ -1,7 +1,32 @@
+body {
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.content {
+  width: 900px;
+  margin: 0 auto;
+}
+@media (max-width: 600px) {
+  .content {
+    width: 100%;
+  }
+}
 .App {
   font-family: sans-serif;
   text-align: center;
 }
 .line {
   text-decoration: line-through;
+}
+.header {
+  height: 100px;
+  width: 100%;
+  background-color: seagreen;
+  color: #fff;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

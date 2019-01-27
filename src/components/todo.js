@@ -6,7 +6,14 @@ class Todo extends Component {
     return (
       <div>
         {this.props.companies.map(e => {
-          return <TodoItem comp={e} />;
+          return (
+            <TodoItem
+              key={e.id}
+              comp={e}
+              toggleLine={this.props.toggleLine}
+              removeItem={this.props.removeItem}
+            />
+          );
         })}
       </div>
     );
